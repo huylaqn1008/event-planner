@@ -9,7 +9,8 @@
   --font-arial: arial;
   --font-arialbold: arial-bold;
   --font-arialmedium: arial-medium;
-  --font-arialblack: arial-black
+  --font-arialblack: arial-black;
+  --color-whitesmoke: #F5F5F5
 }
 
 body {
