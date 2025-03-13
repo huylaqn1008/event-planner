@@ -2,6 +2,7 @@ import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common'
 import { LoginUserDTO, RegisterUserDTO } from 'src/dto/auth.dto'
 import { AuthService } from './auth.service'
 import { AuthGuard } from './auth.guard'
+import { VendorGuard } from 'src/guards/vendor/vendor.guard'
 
 @Controller('/api/v1/auth')
 export class AuthController {
@@ -20,7 +21,7 @@ export class AuthController {
     }
 
     @Get('/profile')
-    @UseGuards(AuthGuard)
+    @UseGuards(AuthGuard, VendorGuard)
     async profileUser(@Req() req) {
         const res_obj = await this.authService.profileUser(req.user, req.type)
         return res_obj

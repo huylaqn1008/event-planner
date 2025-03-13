@@ -53,7 +53,7 @@ export class AuthService {
         )
 
         return {
-            msg: "User Login Successfully",
+            msg: `${check_exist.role} Login Successfully`,
             token
         }
     }
