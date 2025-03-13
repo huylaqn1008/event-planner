@@ -29,3 +29,17 @@ export class RegisterUserDTO {
     @IsEnum(UserRole)
     role: UserRole
 }
+
+export class LoginUserDTO {
+    @IsNotEmpty({
+        message: 'Email is Required'
+    })
+    @IsEmail()
+    email: string
+
+    @IsNotEmpty({
+        message: 'Password is Required'
+    })
+    password: string
+}
+
