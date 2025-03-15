@@ -21,7 +21,7 @@ export class AuthController {
     }
 
     @Get('/profile')
-    @UseGuards(AuthGuard, VendorGuard)
+    @UseGuards(AuthGuard)
     async profileUser(@Req() req) {
         const res_obj = await this.authService.profileUser(req.user, req.type)
         return res_obj

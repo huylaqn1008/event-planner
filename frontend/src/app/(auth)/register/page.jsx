@@ -39,7 +39,6 @@ const RegisterPage = () => {
             setIsLoading(true)
             const res = await axiosClient.post("/auth/register", values)
             const data = await res.data
-            console.log(data)
             toast.success(data.msg)
             localStorage.setItem("token", data.token)
             router.push("/")

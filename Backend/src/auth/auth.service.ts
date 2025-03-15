@@ -26,7 +26,7 @@ export class AuthService {
         const token = this.jwtService.sign({ userId: user._id, type: data.role }, { expiresIn: '30d' })
 
         return {
-            msg: "User Register Successfully",
+            msg: `Register successfully as ${data.role}`,
             token
         }
     }
@@ -53,15 +53,14 @@ export class AuthService {
         )
 
         return {
-            msg: `${check_exist.role} Login Successfully`,
+            msg: `Login successfully`,
             token
         }
     }
 
     async profileUser(id: string, role: string) {
-        return {
-            user: id,
-            role
-        }
+        const user = await this.UserModel.findById(id).select("name email role -_id")
+        console.log(user)
+        return user
     }
 }
