@@ -4,13 +4,15 @@
   --font-pregular: Poppins-regular;
   --font-pbold: Poppins-bold;
   --font-pblack: Poppins-black;
-  --font-pmdfium: Poppins-medium;
+  --font-pmedium: Poppins-medium;
   --font-psmbold: Poppins-semibold;
   --font-arial: arial;
   --font-arialbold: arial-bold;
   --font-arialmedium: arial-medium;
   --font-arialblack: arial-black;
-  --color-whitesmoke: #F5F5F5
+  --color-whitesmoke: #F5F5F5;
+  --color-primary: #1E1B4B;
+  --color-secondary: #0077B6
 }
 
 body {

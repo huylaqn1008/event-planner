@@ -1,12 +1,16 @@
 import "@/assets/fonts/fonts.css"
 import "./globals.css"
 import MainLayout from "@/layout/MainLayout"
+import NextTopLoader from "nextjs-toploader"
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`font-pregular bg-whitesmoke`}>
-        <MainLayout>{children}</MainLayout>
+        <MainLayout>
+          <NextTopLoader color="#1E1B4B"/>
+          {children}
+        </MainLayout>
       </body>
     </html>
   )

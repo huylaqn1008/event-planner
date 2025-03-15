@@ -10,6 +10,7 @@ config({
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
   const port = process.env.PORT ?? 3000
+  app.enableCors()
   app.useGlobalPipes(new ValidationPipe())
   await app.listen(port, ()=> {
     console.log(`This app is listen at http://localhost:${port}`)

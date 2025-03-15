@@ -4,13 +4,18 @@ import Header from "@/components/Header"
 import { MainContextProvider } from "@/context/MainContext"
 import React from "react"
 import { Provider } from "react-redux"
+import { ToastContainer } from "react-toastify"
+import 'react-toastify/dist/ReactToastify.css'
 
 const MainLayout = ({ children }) => {
   return (
     <>
       <Provider store={store}>
-        <Header/>
-        <MainContextProvider>{children}</MainContextProvider>
+        <MainContextProvider>
+          <Header />
+          <ToastContainer />
+          {children}
+        </MainContextProvider>
       </Provider>
     </>
   )
