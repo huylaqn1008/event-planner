@@ -1,5 +1,6 @@
 "use client"
 import CustomButton from '@/components/CustomButton'
+import { useMainContext } from '@/context/MainContext'
 import { axiosClient } from '@/utils/AxiosClient'
 import { ErrorMessage, Field, Form, Formik } from 'formik'
 import Link from 'next/link'
@@ -10,6 +11,8 @@ import { toast } from 'react-toastify'
 import * as yup from 'yup'
 
 const RegisterPage = () => {
+    const { fetchUserProfile } = useMainContext()
+
     const [isHide, setIsHide] = useState(true)
     const [isLoading, setIsLoading] = useState(false)
 
@@ -40,7 +43,9 @@ const RegisterPage = () => {
             const res = await axiosClient.post("/auth/register", values)
             const data = await res.data
             toast.success(data.msg)
+
             localStorage.setItem("token", data.token)
+            await fetchUserProfile()
             router.push("/")
         } catch (error) {
             // Kiểm tra xem error.response có tồn tại không
