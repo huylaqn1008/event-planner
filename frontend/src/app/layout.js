@@ -3,7 +3,7 @@ import "./globals.css"
 import MainLayout from "@/layout/MainLayout"
 import NextTopLoader from "nextjs-toploader"
 
-export default function RootLayout({ children }) {
+export default function RootGroup({ children }) {
   return (
     <html lang="en">
       <body className={`font-pregular bg-whitesmoke`}>
