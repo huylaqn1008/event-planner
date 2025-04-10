@@ -11,12 +11,12 @@ const ProfileButton = () => {
     <>
       <DropdownMenu>
         <DropdownMenuTrigger>
-          <Avatar>
+          <Avatar className={'cursor-pointer'}>
             <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
         </DropdownMenuTrigger>
-        <DropdownMenuContent>
+        <DropdownMenuContent className={''}>
           <DropdownMenuLabel>My Account</DropdownMenuLabel>
           <DropdownMenuSeparator/>
           <DropdownMenuItem>

@@ -10,18 +10,19 @@ import "react-toastify/dist/ReactToastify.css"
 
 const MainLayout = ({ children }) => {
   return (
-    <div className="min-w-[250px] w-full overflow-x-hidden"> {/* Giới hạn chiều ngang tối thiểu */}
+    <>
       <Provider store={store}>
         <MainContextProvider>
           <Header />
           <ToastContainer />
           <main className="pt-20">
+            {" "}
             {children}
           </main>
           <Footer />
         </MainContextProvider>
       </Provider>
-    </div>
+    </>
   )
 }
 
