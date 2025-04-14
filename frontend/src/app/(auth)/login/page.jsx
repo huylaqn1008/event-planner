@@ -36,15 +36,15 @@ const LoginPage = () => {
     const onSubmitHandler = async (values, helpers) => {
         try {
             setIsLoading(true)
-            const res = await axiosClient.post("/auth/login", values)
+            const res = await axiosClient.post("http://192.168.1.13:1234/api/v1/auth/login", values)
             const data = await res.data
             toast.success(data.msg)
-
-            await fetchUserProfile()
+    
             localStorage.setItem("token", data.token)
+            // Đợi cho việc fetch profile hoàn thành trước khi chuyển hướng
+            await fetchUserProfile()
             router.push("/")
         } catch (error) {
-            // Kiểm tra xem error.response có tồn tại không
             const errorMessage = error.response?.data?.message || error.message
             toast.error(errorMessage)
         } finally {
