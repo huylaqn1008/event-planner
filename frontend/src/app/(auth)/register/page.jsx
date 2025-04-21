@@ -40,7 +40,7 @@ const RegisterPage = () => {
     const onSubmitHandler = async (values, helpers) => {
         try {
             setIsLoading(true)
-            const res = await axiosClient.post("http://192.168.1.13:1234/api/v1/auth/register", values)
+            const res = await axiosClient.post("/auth/register", values)
             const data = await res.data
             toast.success(data.msg)
 

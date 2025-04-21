@@ -30,7 +30,7 @@ export const MainContextProvider = ({ children }) => {
     setLoading(true) // Bắt đầu hiển thị Loader
 
     try {
-      const res = await axiosClient.get("http://192.168.1.13:1234/api/v1/auth/profile", {
+      const res = await axiosClient.get("/auth/profile", {
         headers: {
           Authorization: `Bearer ${token}`,
         },

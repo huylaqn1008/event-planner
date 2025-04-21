@@ -5,6 +5,7 @@ import { compare } from 'bcryptjs'
 import { Model } from 'mongoose'
 import { LoginUserDTO, RegisterUserDTO } from 'src/dto/auth.dto'
 import { User } from 'src/models/user.model'
+import cloudinary from 'src/utils/Cloudinary'
 
 @Injectable()
 export class AuthService {
@@ -62,5 +63,12 @@ export class AuthService {
         const user = await this.UserModel.findById(id).select("name email role -_id")
         console.log(user)
         return user
+    }
+
+    async avatarUpdate(file: Express.Multer.File) {
+        const profileImage = await cloudinary.uploader.upload(file.path, {
+            folder:'event-planner'
+        })
+        return profileImage.secure_url
     }
 }

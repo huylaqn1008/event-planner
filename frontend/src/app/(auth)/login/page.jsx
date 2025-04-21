@@ -36,7 +36,7 @@ const LoginPage = () => {
     const onSubmitHandler = async (values, helpers) => {
         try {
             setIsLoading(true)
-            const res = await axiosClient.post("http://192.168.1.13:1234/api/v1/auth/login", values)
+            const res = await axiosClient.post("/auth/login", values)
             const data = await res.data
             toast.success(data.msg)
     

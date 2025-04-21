@@ -3,18 +3,27 @@ import { UserSlicePath } from '@/app/redux/slices/UserSlice'
 import CustomButton from '@/components/CustomButton'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
+import { axiosClient } from '@/utils/AxiosClient'
 import { ErrorMessage, Field, Form, Formik } from 'formik'
-import React, { useCallback } from 'react'
-import { useDropzone } from 'react-dropzone/.'
+import React, { useCallback, useEffect, useState } from 'react'
+import { useDropzone } from 'react-dropzone'
 import { IoCameraOutline } from "react-icons/io5"
+import { AiOutlineLoading3Quarters } from "react-icons/ai"
 import { useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import * as yup from 'yup'
 
 const Profile = () => {
   const user = useSelector(UserSlicePath)
+  const [isMounted, setIsMounted] = useState(false)
 
-  // Nếu user chưa có (null), hiển thị loading
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
+
+  // Chỉ render sau khi mounted để tránh mismatch SSR/CSR
+  if (!isMounted) return null
+
   if (!user) {
     return (
       <div className="py-10 text-center text-gray-500">
@@ -35,8 +44,9 @@ const Profile = () => {
     bio: yup.string().required('Bio is required')
   })
 
-  const onBasicProfileUpdateHandler = (values, helpers) => {
+  const onBasicProfileUpdateHandler = async (values, helpers) => {
     try {
+      // Gửi dữ liệu lên server nếu cần
       toast.success('Profile Updated!')
     } catch (error) {
       toast.error(error.response?.data?.message || error.message)
@@ -125,33 +135,78 @@ const Profile = () => {
 export default Profile
 
 const ImageUploadComponent = () => {
-  const onDrop = useCallback(acceptedFiles => {
+  const [image, setImage] = useState(null)
+  const [previewUrl, setPreviewUrl] = useState(null)
+  const [loading, setLoading] = useState(false)
 
+  const updateProfileAvatar = async (file) => {
+    setLoading(true)
+    try {
+      const form_data = new FormData()
+      form_data.append("image", file)
+
+      const res = await axiosClient.put("/auth/update-avatar", form_data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
+        },
+      })
+
+      await res.data
+      toast.success("Avatar updated!")
+    } catch (error) {
+      toast.error(error.response?.data?.message || error.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const onDrop = useCallback((acceptedFiles) => {
+    const file = acceptedFiles[0]
+    if (file) {
+      setImage(file)
+      setPreviewUrl(URL.createObjectURL(file))
+      updateProfileAvatar(file)
+    }
   }, [])
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop })
+  const { getRootProps, getInputProps } = useDropzone({ onDrop })
 
   return (
-    <>
-      <div {...getRootProps()}>
-        <input {...getInputProps()}/>
-        {
-          isDragActive ? 
-          <p>Drop the files here...</p> : 
-          <p>Drag 'n' drop some files here, or click to select files</p>
-        }
+    <div className="relative w-[200px] h-[200px] mx-auto">
+      <div
+        {...getRootProps()}
+        className={`w-full h-full rounded-full overflow-hidden border-2 border-gray-200 cursor-pointer relative ${
+          loading ? "opacity-50 pointer-events-none" : ""
+        }`}
+      >
+        <input {...getInputProps()} />
+        <img
+          src={
+            previewUrl ||
+            "https://static.vecteezy.com/system/resources/previews/002/275/847/non_2x/male-avatar-profile-icon-of-smiling-caucasian-man-vector.jpg"
+          }
+          className="w-full h-full object-cover"
+          alt="Profile"
+        />
+
+        {loading && (
+          <div className="absolute inset-0 flex items-center justify-center bg-white/60 z-20">
+            <AiOutlineLoading3Quarters className="animate-spin text-2xl text-gray-700" />
+          </div>
+        )}
       </div>
 
-      <div className='relative mx-auto w-[200px] h-[200px] object-cover'>
-        <img
-          src='https://static.vecteezy.com/system/resources/previews/002/275/847/non_2x/male-avatar-profile-icon-of-smiling-caucasian-man-vector.jpg'
-          className='object-cover w-full h-full rounded-full mx-auto'
-          alt='Profile'
-        />
-        <button className='bottom-[15px] right-0 absolute text-xl p-2 shadow text-black bg-white rounded-full'>
-          <IoCameraOutline />
-        </button>
-      </div>
-    </>
+      <button
+        className="absolute bottom-0 right-5 text-xl p-2 shadow text-black bg-white rounded-full z-10"
+        onClick={(e) => {
+          e.stopPropagation()
+          if (!loading) document.querySelector('input[type="file"]').click()
+        }}
+        disabled={loading}
+      >
+        <IoCameraOutline />
+      </button>
+    </div>
   )
 }
