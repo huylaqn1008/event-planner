@@ -1,4 +1,5 @@
-import { IsEmail, IsEnum, IsNotEmpty } from "class-validator"
+import { IsEmail, IsEnum, IsNotEmpty, IsNotEmptyObject } from "class-validator"
+import { Address } from "src/models/profile.model"
 
 export enum UserRole {
     User = "user",
@@ -43,3 +44,31 @@ export class LoginUserDTO {
     password: string
 }
 
+export enum GenderEnum {
+    Male = "male",
+    Female = "female",
+    Other = "Other"
+}
+
+export class UpdateProfileDTO {
+    @IsNotEmpty({
+        message: 'Name Is Required'
+    })
+    name: string
+
+    @IsNotEmptyObject({
+        nullable: true
+    })
+    address: Address
+
+    @IsNotEmpty({
+        message: 'Bio Is Required'
+    })
+    bio: string 
+
+    @IsNotEmpty({
+        message: 'Gender Is Required'
+    })
+    @IsEnum(GenderEnum)
+    gender: string 
+}
